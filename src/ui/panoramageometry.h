@@ -21,7 +21,7 @@ struct PanoramaGeometry
 
     bool isEmpty() const { return image.isEmpty() || view.isEmpty(); }
     qreal minZoom() const { return view.height() / image.height(); } // the image fills the view height
-    qreal maxZoom() const { return std::max(minZoom(), 1 / dpr); }   // 1:1 device pixels, min wins
+    qreal maxZoom() const { return std::max(minZoom(), 3 / dpr); }   // 3 device pixels per image pixel, min wins
     qreal pixelsPerDegree() const { return image.width() * zoom / 360; }
 
     void clamp();                           // zoom limits, vertical edges, angle wrap

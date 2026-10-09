@@ -65,16 +65,16 @@ TEST(PanoramaGeometry, ZoomLimits)
 {
     PanoramaGeometry g = geometry();
     EXPECT_DOUBLE_EQ(g.minZoom(), 800.0 / 900);
-    EXPECT_DOUBLE_EQ(g.maxZoom(), 1);
+    EXPECT_DOUBLE_EQ(g.maxZoom(), 3);
     EXPECT_DOUBLE_EQ(g.zoom, g.minZoom()); // starts at fit-height
 
-    g = geometry({6000, 900}, {1280, 400}, 2); // 1:1 device pixels is 0.5 item px per image px
-    EXPECT_DOUBLE_EQ(g.maxZoom(), 0.5);
+    g = geometry({6000, 900}, {1280, 400}, 2); // 3 device pixels is 1.5 item px per image px
+    EXPECT_DOUBLE_EQ(g.maxZoom(), 1.5);
     g.zoom = 7;
     g.clamp();
-    EXPECT_DOUBLE_EQ(g.zoom, 0.5);
+    EXPECT_DOUBLE_EQ(g.zoom, 1.5);
 
-    g = geometry({6000, 900}, {1280, 800}, 2); // fit-height (0.89) is above 1:1 (0.5): the minimum wins
+    g = geometry({6000, 900}, {1280, 1800}, 2); // fit-height (2) is above 3 device pixels (1.5): the minimum wins
     EXPECT_DOUBLE_EQ(g.maxZoom(), g.minZoom());
     g.zoomAt(2, {100, 100});
     EXPECT_DOUBLE_EQ(g.zoom, g.minZoom());
@@ -84,10 +84,10 @@ TEST(PanoramaGeometry, ResizeReappliesLimits)
 {
     PanoramaGeometry g = geometry({6000, 900}, {1280, 400});
     g.zoomAt(100, {640, 200});
-    EXPECT_DOUBLE_EQ(g.zoom, 1);
-    g.view = {1280, 1000}; // taller than the image at 1:1: fit-height wins
+    EXPECT_DOUBLE_EQ(g.zoom, 3);
+    g.view = {1280, 3000}; // taller than the image at 3x: fit-height wins
     g.clamp();
-    EXPECT_DOUBLE_EQ(g.zoom, 1000.0 / 900);
+    EXPECT_DOUBLE_EQ(g.zoom, 3000.0 / 900);
     EXPECT_DOUBLE_EQ(g.v, 0.5);
 }
 
@@ -103,11 +103,11 @@ TEST(PanoramaGeometry, NewImageSizeKeepsTheZoomRelativeToFit)
     EXPECT_DOUBLE_EQ(g.zoom, g.minZoom());
     EXPECT_DOUBLE_EQ(g.angle, 123);
 
-    g.zoomAt(1.2, {640, 400});
-    g.setImageSize({7450, 1600}); // zoomed in: still 1.2 times fit-height
-    EXPECT_DOUBLE_EQ(g.zoom / g.minZoom(), 1.2);
+    g.zoomAt(3.5, {640, 400});
+    g.setImageSize({7450, 1600}); // zoomed in: still 3.5 times fit-height
+    EXPECT_DOUBLE_EQ(g.zoom / g.minZoom(), 3.5);
 
-    g.setImageSize({3725, 800}); // here 1.2 times fit-height would be beyond 1:1
+    g.setImageSize({3725, 800}); // here 3.5 times fit-height would be beyond 3x
     EXPECT_DOUBLE_EQ(g.zoom, g.maxZoom());
 }
 
@@ -121,8 +121,8 @@ TEST(PanoramaGeometry, ZoomKeepsTheFocalPoint)
     EXPECT_DOUBLE_EQ(g.zoom, 1.1 * 800 / 900);
     EXPECT_NEAR(imagePoint(g, pos).x(), before.x(), 1e-9);
     EXPECT_NEAR(imagePoint(g, pos).y(), before.y(), 1e-9);
-    g.zoomAt(100, pos); // clamped at 1:1, the point still stays put
-    EXPECT_DOUBLE_EQ(g.zoom, 1);
+    g.zoomAt(100, pos); // clamped at 3x, the point still stays put
+    EXPECT_DOUBLE_EQ(g.zoom, 3);
     EXPECT_NEAR(imagePoint(g, pos).x(), before.x(), 1e-9);
     EXPECT_NEAR(imagePoint(g, pos).y(), before.y(), 1e-9);
 }
@@ -133,12 +133,12 @@ TEST(PanoramaGeometry, VerticalPanStopsAtTheEdges)
     g.panBy({0, 300}); // at fit-height it stays centered
     EXPECT_DOUBLE_EQ(g.v, 0.5);
 
-    g.zoomAt(100, {640, 400}); // 1:1: 800 of 900 rows visible
-    g.panBy({0, 1000});
+    g.zoomAt(100, {640, 400}); // 3x: 267 of 900 rows visible
+    g.panBy({0, 3000});
     EXPECT_NEAR(g.visiblePieces(6000).front().rect.top(), 0, 1e-9); // the image top at the view top
     g.panBy({0, -30});
     EXPECT_NEAR(g.visiblePieces(6000).front().rect.top(), -30, 1e-9);
-    g.panBy({0, -1000});
+    g.panBy({0, -3000});
     EXPECT_NEAR(g.visiblePieces(6000).front().rect.bottom(), 800, 1e-9); // the image bottom at the view bottom
 }
 

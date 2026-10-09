@@ -90,10 +90,8 @@ Filter rules use the `QT_LOGGING_RULES` syntax and apply in this order; the last
 
 ## Zoom
 
-Zoom goes from fit-height (the image fills the window height) to 1:1 (one image pixel per screen
-pixel). With the default size (`auto` picks the 800 px high `default` variant of camera 9015) in an
-800 px tall window, both limits are the same, so wheel and pinch do nothing. To zoom, choose a
-taller size variant (for example `--size hd`, 1080 px) or make the window smaller.
+Zoom goes from fit-height (the image fills the window height) to 3x (one image pixel per 3x3
+screen pixels), so the image can be shown up to 3 times its original height.
 
 ## Project layout
 
