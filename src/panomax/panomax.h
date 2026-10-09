@@ -45,6 +45,7 @@ struct Day
 
 // Parses an images/day response. On failure returns nothing and sets *error, also to
 // the message of the API's error response (HTTP 422 for a day without images).
+// Malformed sizes and images entries are dropped, so one of them cannot block the day.
 std::optional<Day> parseDay(const QByteArray &json, QString *error);
 
 // The newest available image of the day, at or before notAfter if that is valid.

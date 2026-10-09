@@ -33,28 +33,21 @@ std::optional<Day> parseDay(const QByteArray &json, QString *error)
     for (const QJsonValue &value : object[u"sizes"].toArray()) {
         const SizeVariant size{value[u"resolution"].toString(), value[u"cols"].toInt(), value[u"rows"].toInt(),
                                {value[u"tileWidth"].toInt(), value[u"tileHeight"].toInt()}};
-        // The name goes into URLs, the size into an image allocation.
+        // The name goes into URLs, the size into an image allocation. A malformed entry is dropped.
         constexpr qint64 maxSide = std::numeric_limits<int>::max();
         const bool valid = !size.name.isEmpty()
             && std::ranges::all_of(size.name, [](QChar c) { return c.isLetterOrNumber(); })
             && size.cols > 0 && size.rows > 0 && size.tileSize.width() > 0 && size.tileSize.height() > 0
             && qint64(size.cols) * size.tileSize.width() <= maxSide
             && qint64(size.rows) * size.tileSize.height() <= maxSide;
-        if (!valid) {
-            *error = u"invalid size entry: "_s
-                + QString::fromUtf8(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact));
-            return {};
-        }
-        day.sizes.append(size);
+        if (valid)
+            day.sizes.append(size);
     }
     for (const QJsonValue &value : object[u"images"].toArray()) {
         const ImageTime image{QTime::fromString(value[u"time"].toString(), Qt::ISODate),
                               value[u"available"].toBool()};
-        if (!image.time.isValid()) {
-            *error = u"invalid image time: "_s + value[u"time"].toString();
-            return {};
-        }
-        day.images.append(image);
+        if (image.time.isValid()) // a malformed entry is dropped
+            day.images.append(image);
     }
     return day;
 }

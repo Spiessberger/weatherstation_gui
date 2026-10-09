@@ -99,20 +99,31 @@ TEST(PanomaxParse, RejectsBrokenData)
         {"<html>404</html>", u"invalid JSON"_s},
         {R"({"storage":40})", u"no valid date"_s},
         {R"({"date":"2026-10-09","storage":-1})", u"no valid date"_s},
-        {R"({"date":"2026-10-09","storage":40,"sizes":[{"resolution":"hd","cols":0,"rows":1,"tileWidth":1,"tileHeight":1}]})",
-         u"invalid size entry"_s},
-        {R"({"date":"2026-10-09","storage":40,"sizes":[{"resolution":"../x","cols":1,"rows":1,"tileWidth":1,"tileHeight":1}]})",
-         u"invalid size entry"_s},
-        {R"({"date":"2026-10-09","storage":40,"sizes":[{"resolution":"x","cols":2,"rows":1,"tileWidth":2000000000,"tileHeight":1}]})",
-         u"invalid size entry"_s},
-        {R"({"date":"2026-10-09","storage":40,"images":[{"time":"25:00:00","available":true}]})",
-         u"invalid image time"_s},
     };
     for (const auto &[json, expected] : cases) {
         QString error;
         EXPECT_FALSE(parseDay(json, &error)) << json.constData();
         EXPECT_TRUE(error.startsWith(expected)) << json.constData() << " -> " << error.toStdString();
     }
+}
+
+TEST(PanomaxParse, DropsMalformedEntries)
+{
+    // No tiles, a name unfit for URLs, a width that overflows, a time that does not exist: each
+    // such entry is dropped, and the good entries next to them remain.
+    const QByteArray json = R"({"date":"2026-10-09","storage":40,"sizes":[
+        {"resolution":"hd","cols":0,"rows":1,"tileWidth":1,"tileHeight":1},
+        {"resolution":"../x","cols":1,"rows":1,"tileWidth":1,"tileHeight":1},
+        {"resolution":"x","cols":2,"rows":1,"tileWidth":2000000000,"tileHeight":1},
+        {"resolution":"default","cols":1,"rows":1,"tileWidth":3725,"tileHeight":800}],
+        "images":[{"time":"25:00:00","available":true},{"time":"15:50:00","available":true}]})";
+    QString error;
+    const std::optional<Day> day = parseDay(json, &error);
+    ASSERT_TRUE(day) << error.toStdString();
+    ASSERT_EQ(day->sizes.size(), 1);
+    EXPECT_EQ(day->sizes[0].name, u"default"_s);
+    ASSERT_EQ(day->images.size(), 1);
+    EXPECT_EQ(day->images[0].time, QTime(15, 50));
 }
 
 TEST(PanomaxChooseImage, NewestAvailable)
