@@ -79,7 +79,7 @@ private:
 
     QImage m_image;
     bool m_imageChanged = false; // tells the render thread to split the new image into strips
-    qreal m_speed = 6;
+    qreal m_speed = 3;
     Direction m_direction = Right;
     int m_idleTimeout = 5000;
 

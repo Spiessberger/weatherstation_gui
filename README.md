@@ -37,7 +37,7 @@ app logs the path at startup and in `--help`.
 |---|---|---|---|
 | `--camera <id>` | `camera` | `9015` | Panomax camera id |
 | `--size <name>` | `size` | `auto` | size variant (`thumb`, `small`, `optimized`, `reduced`, `default`, `hd`, `full`), or `auto`: the smallest one at least 800 px high |
-| `--autoscroll-speed <deg/s>` | `autoscroll-speed` | `6` | 0.1 to 360 degrees per second |
+| `--autoscroll-speed <deg/s>` | `autoscroll-speed` | `3` | 0.1 to 360 degrees per second |
 | `--autoscroll-direction <left\|right>` | `autoscroll-direction` | `right` | `right` turns the view right, so the image content moves left |
 | `--idle-timeout <s>` | `idle-timeout` | `5` | seconds without input before autoscroll resumes, 1 to 3600 |
 | `--poll-interval <s>` | `poll-interval` | `60` | seconds between checks for a newer image, 10 to 3600 |

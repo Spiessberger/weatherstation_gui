@@ -46,7 +46,7 @@ TEST_F(ConfigTest, DefaultsWithoutIniFile)
     const Config config = resolveConfig(QSettings(missing, QSettings::IniFormat), {u"app"_s});
     EXPECT_EQ(config.cameraId, 9015);
     EXPECT_EQ(config.sizeVariant, u"auto"_s);
-    EXPECT_EQ(config.autoscrollSpeed, 6.0);
+    EXPECT_EQ(config.autoscrollSpeed, 3.0);
     EXPECT_EQ(config.autoscrollDirection, u"right"_s);
     EXPECT_EQ(config.idleTimeout, 5);
     EXPECT_EQ(config.pollInterval, 60);
@@ -106,7 +106,7 @@ TEST_F(ConfigTest, InvalidIniValuesFallBackToDefaults)
     const Config config = resolve("camera=abc\nautoscroll-speed=0\nautoscroll-direction=up\n"
                                   "idle-timeout=5.5\npoll-interval=9\nfullscreen=yes\n");
     EXPECT_EQ(config.cameraId, 9015);
-    EXPECT_EQ(config.autoscrollSpeed, 6.0);
+    EXPECT_EQ(config.autoscrollSpeed, 3.0);
     EXPECT_EQ(config.autoscrollDirection, u"right"_s);
     EXPECT_EQ(config.idleTimeout, 5);
     EXPECT_EQ(config.pollInterval, 60);

@@ -11,7 +11,7 @@ struct Config
 {
     int cameraId = 9015;
     QString sizeVariant = QStringLiteral("auto");          // Panomax size variant name, or "auto"
-    double autoscrollSpeed = 6;                            // degrees per second
+    double autoscrollSpeed = 3;                            // degrees per second
     QString autoscrollDirection = QStringLiteral("right"); // "left" or "right"
     int idleTimeout = 5;                                   // seconds without input before autoscroll resumes
     int pollInterval = 60;                                 // seconds between checks for a newer image

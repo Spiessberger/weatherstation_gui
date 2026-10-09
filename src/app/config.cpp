@@ -65,7 +65,7 @@ Config resolveConfig(const QSettings &ini, const QStringList &arguments)
          u"Image size variant: thumb, small, optimized, reduced, default, hd, full, or auto for the "
          "smallest one at least 800 px high (default: auto)."_s,
          u"name"_s},
-        {u"autoscroll-speed"_s, u"Autoscroll speed in degrees per second, 0.1 to 360 (default: 6)."_s,
+        {u"autoscroll-speed"_s, u"Autoscroll speed in degrees per second, 0.1 to 360 (default: 3)."_s,
          u"deg/s"_s},
         {u"autoscroll-direction"_s, u"Autoscroll direction (default: right)."_s, u"left|right"_s},
         {u"idle-timeout"_s,
