@@ -12,3 +12,6 @@ qt_add_qml_module(weatherstation_gui
 )
 target_compile_definitions(weatherstation_gui PRIVATE APP_VERSION="${PROJECT_VERSION}")
 target_link_libraries(weatherstation_gui PRIVATE app_core Qt6::Quick panomaxplugin uiplugin)
+
+# Main.qml and the Panomax and Ui modules are compiled in, so the binary is all there is to install.
+install(TARGETS weatherstation_gui RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

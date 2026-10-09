@@ -13,7 +13,7 @@ It uses only Qt Core, Gui, Network, Qml and Quick.
 - Qt 6.12 in `~/Qt/6.12.0/gcc_64` (the `debug` preset points there)
 - CMake 3.28 or newer and a C++20 compiler
 - On Fedora: `libglvnd-devel` (Qt's CMake config needs the OpenGL headers)
-- Network access on the first configure: CMake downloads GoogleTest
+- Network access on the first configure: CMake downloads GoogleTest (not with `-DBUILD_TESTING=OFF`)
 
 ## Build, run, test
 
@@ -25,6 +25,16 @@ build/debug/src/app/weatherstation_gui
 ```
 
 `cmake --build --preset debug --target all_qmllint` lints the QML.
+
+For a release build without tests (no GoogleTest download, nothing run at build time, so it also
+works when cross-compiling), turn off `BUILD_TESTING`. `cmake --install` installs only
+`bin/weatherstation_gui`: the QML modules are compiled into it, and it uses the system's Qt.
+
+```sh
+cmake -B build/release -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH=~/Qt/6.12.0/gcc_64
+cmake --build build/release -j$(nproc)
+cmake --install build/release --prefix /usr/local
+```
 
 ## Settings
 
