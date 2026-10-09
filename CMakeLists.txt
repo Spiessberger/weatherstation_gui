@@ -22,7 +22,8 @@ qt_standard_project_setup(REQUIRES 6.12)
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 enable_testing()
+# The QML modules before the app, whose DEPENDENCIES TARGET needs their targets.
 add_subdirectory(src/panomax)
-add_subdirectory(src/app)
 add_subdirectory(src/ui)
+add_subdirectory(src/app)
 add_subdirectory(tests)

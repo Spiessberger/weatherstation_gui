@@ -7,6 +7,8 @@ qt_add_executable(weatherstation_gui main.cpp)
 qt_add_qml_module(weatherstation_gui
     URI App
     QML_FILES Main.qml
+    # Lets qmlcachegen and qmllint find the types of Main.qml's imports.
+    DEPENDENCIES TARGET panomax TARGET ui
 )
 target_compile_definitions(weatherstation_gui PRIVATE APP_VERSION="${PROJECT_VERSION}")
-target_link_libraries(weatherstation_gui PRIVATE app_core Qt6::Quick)
+target_link_libraries(weatherstation_gui PRIVATE app_core Qt6::Quick panomaxplugin uiplugin)
