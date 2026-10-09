@@ -61,7 +61,8 @@ QUrl dayUrl(int camera, QDate date = {});
 // The files of one image: one URL, or one per tile, row by row.
 QList<QUrl> imageUrls(int camera, const Day &day, QTime time, const SizeVariant &size);
 
-// Decodes the files from imageUrls() into one image. Null if a file does not decode.
+// Decodes the files from imageUrls() into one image. Null if a file does not decode
+// or the image is too big to allocate.
 QImage stitchTiles(const QList<QByteArray> &files, const SizeVariant &size);
 
 } // namespace Panomax

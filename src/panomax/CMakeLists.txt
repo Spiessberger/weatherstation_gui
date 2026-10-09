@@ -7,6 +7,7 @@ qt_add_qml_module(panomax
     SOURCES
         panomax.cpp panomax.h
         panomaxclient.cpp panomaxclient.h
+        panomaximagesource.cpp panomaximagesource.h
 )
 target_include_directories(panomax PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(panomax PUBLIC Qt6::Core Qt6::Gui Qt6::Network Qt6::Qml)
