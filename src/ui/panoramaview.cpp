@@ -7,7 +7,7 @@
 #include <cmath>
 #include <memory>
 
-Q_LOGGING_CATEGORY(lcPanorama, "ws.ui.panorama")
+Q_STATIC_LOGGING_CATEGORY(lcPanorama, "ws.ui.panorama")
 
 namespace {
 // ponytail: the smallest common GPU limit (e.g. Raspberry Pi VideoCore IV), so it fits every
