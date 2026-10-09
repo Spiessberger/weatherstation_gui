@@ -10,3 +10,7 @@ endfunction()
 
 add_gtest(app_core_test config_test.cpp logging_test.cpp)
 target_link_libraries(app_core_test PRIVATE app_core)
+
+add_gtest(panomax_test panomax_test.cpp)
+target_link_libraries(panomax_test PRIVATE panomax)
+target_compile_definitions(panomax_test PRIVATE FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures")

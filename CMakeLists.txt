@@ -15,12 +15,13 @@ FetchContent_Declare(googletest
 )
 FetchContent_MakeAvailable(googletest)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Qml Quick)
 qt_standard_project_setup(REQUIRES 6.12)
 
 # ponytail: GCC/Clang flags only; add an MSVC branch if Windows builds are ever needed
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 enable_testing()
+add_subdirectory(src/panomax)
 add_subdirectory(src/app)
 add_subdirectory(tests)
