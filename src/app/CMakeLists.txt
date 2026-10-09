@@ -1,5 +1,5 @@
 # App-level code the tests can link; main.cpp stays a thin wrapper around it.
-qt_add_library(app_core STATIC logging.cpp logging.h)
+qt_add_library(app_core STATIC config.cpp config.h logging.cpp logging.h)
 target_include_directories(app_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(app_core PUBLIC Qt6::Core)
 

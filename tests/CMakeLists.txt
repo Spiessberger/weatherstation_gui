@@ -8,5 +8,5 @@ function(add_gtest name)
     gtest_discover_tests(${name})
 endfunction()
 
-add_gtest(app_core_test logging_test.cpp)
+add_gtest(app_core_test config_test.cpp logging_test.cpp)
 target_link_libraries(app_core_test PRIVATE app_core)
