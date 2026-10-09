@@ -2,6 +2,8 @@
 qt_add_library(panomax STATIC)
 qt_add_qml_module(panomax
     URI Panomax
+    # Tooling finds a module only in a directory named after its URI.
+    OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Panomax
     SOURCES
         panomax.cpp panomax.h
         panomaxclient.cpp panomaxclient.h
