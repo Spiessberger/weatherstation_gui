@@ -64,7 +64,10 @@ void PanoramaView::setImage(const QImage &image)
     qCDebug(lcPanorama, "new image %dx%d", image.width(), image.height());
     m_image = image;
     m_imageChanged = true;
-    relayout(); // keeps the angle and the zoom, within the new image's limits
+    // Another resolution keeps the view: same angle, same zoom relative to fit-height.
+    m_geo.setImageSize(image.size());
+    m_resetFrom.setImageSize(image.size()); // the start of a running reset, too
+    relayout();
     updateTicker();
     emit imageChanged();
 }
@@ -143,7 +146,6 @@ void PanoramaView::itemChange(ItemChange change, const ItemChangeData &data)
 
 void PanoramaView::relayout()
 {
-    m_geo.image = m_image.size();
     m_geo.view = size();
     m_geo.dpr = window() ? window()->effectiveDevicePixelRatio() : 1;
     m_geo.clamp();

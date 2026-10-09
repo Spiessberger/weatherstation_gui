@@ -91,6 +91,26 @@ TEST(PanoramaGeometry, ResizeReappliesLimits)
     EXPECT_DOUBLE_EQ(g.v, 0.5);
 }
 
+TEST(PanoramaGeometry, NewImageSizeKeepsTheZoomRelativeToFit)
+{
+    PanoramaGeometry g;
+    g.view = {1280, 800};
+    g.setImageSize({3725, 800}); // the first image starts at fit-height, here 1:1
+    EXPECT_DOUBLE_EQ(g.zoom, 1);
+    g.angle = 123;
+
+    g.setImageSize({5028, 1080}); // a taller variant of the same scene: still fit-height
+    EXPECT_DOUBLE_EQ(g.zoom, g.minZoom());
+    EXPECT_DOUBLE_EQ(g.angle, 123);
+
+    g.zoomAt(1.2, {640, 400});
+    g.setImageSize({7450, 1600}); // zoomed in: still 1.2 times fit-height
+    EXPECT_DOUBLE_EQ(g.zoom / g.minZoom(), 1.2);
+
+    g.setImageSize({3725, 800}); // here 1.2 times fit-height would be beyond 1:1
+    EXPECT_DOUBLE_EQ(g.zoom, g.maxZoom());
+}
+
 TEST(PanoramaGeometry, ZoomKeepsTheFocalPoint)
 {
     PanoramaGeometry g = geometry();

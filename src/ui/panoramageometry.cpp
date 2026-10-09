@@ -36,6 +36,15 @@ void PanoramaGeometry::zoomAt(qreal factor, QPointF pos)
     panBy((QPointF(view.width(), view.height()) / 2 - pos) * (zoom / oldZoom - 1));
 }
 
+void PanoramaGeometry::setImageSize(QSizeF size)
+{
+    // The same part of the scene at another resolution: zoom / minZoom() stays the same.
+    if (!image.isEmpty() && !size.isEmpty())
+        zoom *= image.height() / size.height();
+    image = size;
+    clamp();
+}
+
 std::vector<PanoramaGeometry::Piece> PanoramaGeometry::visiblePieces(int stripWidth) const
 {
     std::vector<Piece> pieces;

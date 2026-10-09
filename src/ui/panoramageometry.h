@@ -9,7 +9,7 @@
 
 // The math behind PanoramaView, free of GUI types so tests run it without a QGuiApplication.
 // Units: angles in degrees, image sizes in source pixels, view positions in item pixels.
-// After changing image, view or dpr, call clamp().
+// Change the image with setImageSize(); after changing view or dpr, call clamp().
 struct PanoramaGeometry
 {
     QSizeF image;      // the source panorama
@@ -28,6 +28,7 @@ struct PanoramaGeometry
     void turn(qreal degrees);               // positive turns right: the content moves left
     void panBy(QPointF delta);              // the content follows a drag by delta
     void zoomAt(qreal factor, QPointF pos); // the image point under pos stays put
+    void setImageSize(QSizeF size);         // zoom stays relative to fit-height: fit stays fit
 
     // One copy of a texture strip and where it goes in the item. Strips are stripWidth wide
     // (the last one narrower), side by side; copies repeat them every image width.
